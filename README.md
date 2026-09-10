@@ -23,7 +23,20 @@ jobs:
     uses: nubitio/.github/.github/workflows/reusable-ci-php.yml@main
     with:
       php-version: "8.4"
+      # optional; otherwise vars.CI_RUNNER_PROVIDER (same as gkydental / efact)
+      # runner_provider: github
 ```
+
+### Runners (`vars.CI_RUNNER_PROVIDER`)
+
+Same expression as gkydental and efact:
+
+| Value | Label |
+| --- | --- |
+| `github` | `ubuntu-latest` |
+| anything else, including unset | `blacksmith-2vcpu-ubuntu-2404` |
+
+Set it as an Actions variable on the **caller** repo (or the org, if you have that permission). Per-run override: `workflow_dispatch` input `runner_provider`, forwarded into the reusable workflow.
 
 A repository that needs different CI should keep its own `.github/workflows` and ignore these templates.
 

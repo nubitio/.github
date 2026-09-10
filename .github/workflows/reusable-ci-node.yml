@@ -7,6 +7,11 @@
 #       node-version: "22"
 #       package-manager: "pnpm"
 #
+# Runner: same switch as gkydental / efact.
+#   vars.CI_RUNNER_PROVIDER == github  → ubuntu-latest
+#   otherwise (unset, blacksmith, …)   → blacksmith-2vcpu-ubuntu-2404
+# Override per run with `runner_provider`.
+#
 name: Reusable Node CI
 
 on:
@@ -28,11 +33,16 @@ on:
         type: boolean
         required: false
         default: true
+      runner_provider:
+        description: Override vars.CI_RUNNER_PROVIDER (blacksmith or github)
+        type: string
+        required: false
+        default: ""
 
 jobs:
   node:
     name: Node ${{ inputs.node-version }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ (inputs.runner_provider || vars.CI_RUNNER_PROVIDER) == 'github' && 'ubuntu-latest' || 'blacksmith-2vcpu-ubuntu-2404' }}
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}

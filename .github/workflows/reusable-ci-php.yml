@@ -5,7 +5,11 @@
 #     uses: nubitio/.github/.github/workflows/reusable-ci-php.yml@main
 #     with:
 #       php-version: "8.4"
-#       working-directory: "."
+#
+# Runner: same switch as gkydental / efact.
+#   vars.CI_RUNNER_PROVIDER == github  → ubuntu-latest
+#   otherwise (unset, blacksmith, …)   → blacksmith-2vcpu-ubuntu-2404
+# Override per run with `runner_provider`.
 #
 name: Reusable PHP CI
 
@@ -36,11 +40,16 @@ on:
         type: boolean
         required: false
         default: true
+      runner_provider:
+        description: Override vars.CI_RUNNER_PROVIDER (blacksmith or github)
+        type: string
+        required: false
+        default: ""
 
 jobs:
   php:
     name: PHP ${{ inputs.php-version }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ (inputs.runner_provider || vars.CI_RUNNER_PROVIDER) == 'github' && 'ubuntu-latest' || 'blacksmith-2vcpu-ubuntu-2404' }}
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}

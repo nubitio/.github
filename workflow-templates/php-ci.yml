@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      runner_provider:
+        description: Override vars.CI_RUNNER_PROVIDER (blacksmith or github)
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -13,3 +20,4 @@ jobs:
     uses: nubitio/.github/.github/workflows/reusable-ci-php.yml@main
     with:
       php-version: "8.4"
+      runner_provider: ${{ github.event.inputs.runner_provider || '' }}

@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      runner_provider:
+        description: Override vars.CI_RUNNER_PROVIDER (blacksmith or github)
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -14,3 +21,4 @@ jobs:
     with:
       node-version: "22"
       package-manager: "pnpm"
+      runner_provider: ${{ github.event.inputs.runner_provider || '' }}
