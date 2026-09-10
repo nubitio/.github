@@ -2,7 +2,7 @@
 
 Software studio in Peru. We build operational systems for companies that cannot pause the business while the software catches up — invoicing, hosting, admin platforms, and industry SaaS.
 
-**[nubit.io](https://www.nubit.io)** · Arequipa / Peru
+**[Sitio](https://nubitio.github.io)** · Arequipa / Peru
 
 ## What we ship
 
@@ -36,5 +36,5 @@ Default community files, PR and issue templates, and reusable Actions live in th
 
 ## Contact
 
-- Web: [nubit.io](https://www.nubit.io)
+- Web: [nubitio.github.io](https://nubitio.github.io)
 - Security: private advisory on the repository, not email-in-public
