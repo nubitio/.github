@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security policy
+    url: https://github.com/nubitio/.github/blob/main/SECURITY.md
+    about: Report vulnerabilities via a private advisory on the affected repo. Not a public issue.
+  - name: Nubit website
+    url: https://www.nubit.io
+    about: Commercial products, hosting, and eFact — not GitHub issues.
+  - name: nubit-symfony (backend packages)
+    url: https://github.com/nubitio/nubit-symfony/issues/new/choose
+    about: PHP packages live here, not in the read-only splits.
+  - name: nubit-react (frontend packages)
+    url: https://github.com/nubitio/nubit-react/issues/new/choose
+    about: @nubitio npm packages.

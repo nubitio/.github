@@ -1,0 +1,41 @@
+name: Bug report
+description: Something does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security issues: use a **private advisory**, not this form.
+        Backend packages → nubit-symfony. Frontend packages → nubit-react. Do not open bugs on read-only splits.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Package version, git SHA, or “skeleton from date …”
+      placeholder: "nubitio/admin-bundle 0.15.x / @nubitio/react-admin 0.11.x"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal steps or a small repo. No production dumps, no secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: PHP/Node version, browser, Docker or not.
