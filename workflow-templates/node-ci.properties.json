@@ -1,0 +1,6 @@
+{
+  "name": "Nubit Node CI",
+  "description": "pnpm install, lint, test, build. Calls the org reusable workflow.",
+  "iconName": "nodejs",
+  "categories": ["JavaScript", "TypeScript", "Continuous Integration"]
+}

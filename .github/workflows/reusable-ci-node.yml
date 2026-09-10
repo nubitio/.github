@@ -1,0 +1,84 @@
+# Reusable Node CI. Call from another nubitio repo:
+#
+# jobs:
+#   ci:
+#     uses: nubitio/.github/.github/workflows/reusable-ci-node.yml@main
+#     with:
+#       node-version: "22"
+#       package-manager: "pnpm"
+#
+name: Reusable Node CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        required: false
+        default: "22"
+      working-directory:
+        type: string
+        required: false
+        default: "."
+      package-manager:
+        type: string
+        required: false
+        default: "pnpm"
+      run-build:
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  node:
+    name: Node ${{ inputs.node-version }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.package-manager }}
+          cache-dependency-path: ${{ inputs.working-directory }}
+
+      - name: Install (pnpm)
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Install (npm)
+        if: ${{ inputs.package-manager == 'npm' }}
+        run: npm ci
+
+      - name: Lint
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run lint --if-present
+          else
+            npm run lint --if-present
+          fi
+
+      - name: Test
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run test --if-present
+          else
+            npm run test --if-present
+          fi
+
+      - name: Build
+        if: ${{ inputs.run-build }}
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run build --if-present
+          else
+            npm run build --if-present
+          fi

@@ -1,0 +1,6 @@
+{
+  "name": "Nubit PHP CI",
+  "description": "Composer install, php-cs-fixer dry-run, PHPStan, PHPUnit. Calls the org reusable workflow.",
+  "iconName": "php",
+  "categories": ["php", "Continuous Integration"]
+}

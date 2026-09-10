@@ -1,0 +1,93 @@
+# Reusable PHP CI. Call from another nubitio repo:
+#
+# jobs:
+#   ci:
+#     uses: nubitio/.github/.github/workflows/reusable-ci-php.yml@main
+#     with:
+#       php-version: "8.4"
+#       working-directory: "."
+#
+name: Reusable PHP CI
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        type: string
+        required: false
+        default: "8.4"
+      working-directory:
+        type: string
+        required: false
+        default: "."
+      composer-args:
+        type: string
+        required: false
+        default: "--prefer-dist --no-progress"
+      phpunit:
+        type: boolean
+        required: false
+        default: true
+      phpstan:
+        type: boolean
+        required: false
+        default: true
+      php-cs-fixer-dry:
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  php:
+    name: PHP ${{ inputs.php-version }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ inputs.php-version }}-${{ hashFiles(format('{0}/composer.lock', inputs.working-directory)) }}
+          restore-keys: composer-${{ runner.os }}-${{ inputs.php-version }}-
+
+      - name: Install
+        run: composer install ${{ inputs.composer-args }}
+
+      - name: PHP CS Fixer (dry-run)
+        if: ${{ inputs.php-cs-fixer-dry }}
+        run: |
+          if [ -f vendor/bin/php-cs-fixer ]; then
+            vendor/bin/php-cs-fixer fix --dry-run --diff
+          else
+            echo "php-cs-fixer not installed — skip"
+          fi
+
+      - name: PHPStan
+        if: ${{ inputs.phpstan }}
+        run: |
+          if [ -f vendor/bin/phpstan ]; then
+            vendor/bin/phpstan analyse --no-progress
+          else
+            echo "phpstan not installed — skip"
+          fi
+
+      - name: PHPUnit
+        if: ${{ inputs.phpunit }}
+        run: |
+          if [ -f vendor/bin/phpunit ]; then
+            vendor/bin/phpunit
+          elif [ -f bin/phpunit ]; then
+            bin/phpunit
+          else
+            echo "phpunit not installed — skip"
+          fi
